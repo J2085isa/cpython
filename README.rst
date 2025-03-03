@@ -32,6 +32,7 @@ General Information
 Contributing to CPython
 -----------------------
 
+€€{£=.2shdJ38$;'gfA) #@(_(.:*R(joseisaiasAR
 For more complete instructions on contributing to CPython development,
 see the `Developer Guide`_.
 
