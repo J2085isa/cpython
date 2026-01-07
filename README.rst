@@ -233,4 +233,36 @@ This Python distribution contains *no* GNU General Public License (GPL) code,
 so it may be used in proprietary projects.  There are interfaces to some GNU
 code but these are entirely optional.
 
-All trademarks referenced herein are property of their respective holders.
+All trademarks referenced herein are property of their respective holders.DESCRIPCIÓN COMPLETA DEL PROYECTO "ALGORITMOS Y ESTRUCTURAS DE DATOS"
+ 
+ 
+ 
+Este repositorio, titulado "Algoritmos-y-estructuras-de-datos", es una bifurcación del proyecto original de  MatiasSeleme , mantenido por el usuario  J2085isa . Su propósito principal es servir como un recurso práctico para el aprendizaje, implementación y consolidación de conocimientos en el área de algoritmos y estructuras de datos, además de funcionar como base para desarrollos más complejos que requieran un manejo eficiente de la información.
+ 
+ESTRUCTURA ORGANIZATIVA
+ 
+El proyecto cuenta con una distribución de carpetas diseñada para facilitar la navegación, mantenimiento y escalabilidad del código:
+ 
+-  estructuras_de_datos/ : Contiene implementaciones de tipos de datos fundamentales como listas enlazadas (simples y dobles), pilas, colas, árboles y grafos, cada una en un archivo independiente con su propia lógica.
+-  algoritmos/ : Incluye código para procesos computacionales clave, entre ellos algoritmos de ordenación (burbuja, inserción, mezcla, quicksort), búsqueda (secuencial, binaria) y técnicas aplicadas a grafos (DFS, BFS, Dijkstra).
+-  ejercicios/ : Reúne problemas resueltos y propuestos clasificados por nivel de dificultad, orientados a aplicar los conceptos aprendidos.
+-  pruebas/ : Almacena scripts de validación para asegurar el correcto funcionamiento de todas las implementaciones, utilizando herramientas como  pytest  para la ejecución automatizada.
+ 
+CARACTERÍSTICAS PRINCIPALES
+ 
+- Lenguaje de programación: Se basa en [especificar lenguaje, ej: Python], con sintaxis clara y adaptada a las particularidades del lenguaje para optimizar el rendimiento y la legibilidad.
+- Documentación detallada: Cada archivo, clase y función cuenta con descripciones completas que incluyen propósito, parámetros, valores de retorno y ejemplos de uso, facilitando tanto el entendimiento como la reutilización del código.
+- Validación garantizada: El conjunto de pruebas asegura que todas las operaciones funcionen según lo esperado, detectando errores o inconsistencias ante cualquier modificación.
+- Requisitos mínimos: El proyecto cuenta con un archivo  requirements.txt  que lista las dependencias necesarias (como  pytest  para las pruebas), las cuales se instalan de manera sencilla mediante comandos estándar.
+ 
+USO DEL PROYECTO
+ 
+Para utilizar el código, basta con clonar el repositorio, instalar las dependencias requeridas y acceder a las clases o funciones desde los módulos correspondientes. Por ejemplo, se puede crear una lista enlazada, agregar elementos y mostrar su contenido con pocas líneas de código. Asimismo, las pruebas se ejecutan de forma automatizada para verificar el correcto comportamiento de cada implementación.
+ 
+OBJETIVOS Y POTENCIAL
+ 
+El proyecto se orienta a estudiantes, desarrolladores y cualquier persona interesada en fortalecer sus conocimientos en el área. Además de su utilidad educativa, puede servir como base para proyectos de software que requieran estructuras de datos eficientes o algoritmos optimizados. Se contempla la posibilidad de aceptar contribuciones de la comunidad para ampliar el conjunto de implementaciones y mejorar las existentes.
+ 
+ 
+ 
+¿Te gustaría que adapte esta descripción para usarla directamente en el  README.md  del repositorio, o que la ajuste según algún detalle específico del código que tengas implementado?
