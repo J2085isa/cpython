@@ -97,3 +97,203 @@ else
     CPU_COUNT="$(nproc)"
     export CPU_COUNT
 fi
+# -*- coding: utf-8 -*-
+"""
+PROYECTO ALVAREZTRUCKING1 - INTEGRADO EN REPOSITORIO CPython
+Descripción: Script para gestión de redes sociales y datos empresariales
+Autor: [Tu nombre]
+Fecha: 2026-01-07
+Versión: 1.2
+"""
+
+import json
+import os
+from datetime import datetime
+from typing import Dict, Optional
+
+# Rutas relativas dentro del repositorio CPython
+RUTA_CONFIG = os.path.join(os.path.dirname(__file__), "config", "configuracion.json")
+RUTA_DATOS = os.path.join(os.path.dirname(__file__), "datos")
+
+# Crear carpeta de datos si no existe
+os.makedirs(RUTA_DATOS, exist_ok=True)
+
+
+# -------------------------- CLASE: CARGA DE CONFIGURACIÓN --------------------------
+class CargadorConfiguracion:
+    """Carga datos fijos de la empresa desde archivo JSON"""
+    @staticmethod
+    def cargar() -> Dict:
+        try:
+            with open(RUTA_CONFIG, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            raise Exception(f"Archivo de configuración no encontrado en {RUTA_CONFIG}")
+
+
+# -------------------------- CLASE: ANALIZADOR DE PERFILES --------------------------
+class AnalizadorRedesSociales:
+    """Analiza y almacena datos de perfiles empresariales"""
+    def __init__(self):
+        self.config = CargadorConfiguracion.cargar()
+        self.nombre_principal = self.config["nombre_empresa"]
+        self.datos_perfiles: Dict[str, Dict] = {}
+        self.datos_empresa: Dict = {}
+
+    def cargar_datos_perfil(self, plataforma: str, seguidores: int, siguiendo: int, me_gusta: int):
+        """Carga datos de perfiles con descripción desde configuración"""
+        plataforma = plataforma.lower()
+        descripcion = (
+            f"{self.nombre_principal} - {self.config['rubro']} en {self.config['direccion']} 🚚 | "
+            f"{self.config['servicios']} | Contáctanos: {self.config['contacto']['telefono']}"
+        )
+
+        self.datos_perfiles[plataforma] = {
+            "nombre_usuario": self.config["redes_sociales"][plataforma],
+            "seguidores": seguidores,
+            "siguiendo": siguiendo,
+            "me_gusta_totales": me_gusta,
+            "descripcion": descripcion,
+            "fecha_analisis": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "hashtags_destacados": self._obtener_hashtags(plataforma)
+        }
+
+    def cargar_datos_empresa(self):
+        """Carga datos empresariales desde configuración"""
+        self.datos_empresa = {
+            "nombre": self.nombre_principal,
+            "rubro": self.config["rubro"],
+            "direccion": self.config["direccion"],
+            "servicios": self.config["servicios"],
+            "contacto": self.config["contacto"],
+            "horario_atencion": "Lunes a Viernes: 08:00 - 18:00 | Sábados: 09:00 - 14:00"
+        }
+
+    def _obtener_hashtags(self, plataforma: str) -> list:
+        """Hashtags personalizados por plataforma"""
+        hashtags_base = ["#AlvarezTrucking1", "#Transporte", "#Logistica", "#Saltillo", "#Coahuila"]
+        plataforma_hashtags = {
+            "kwai": ["#KwaiEmpresarial", "#TransporteMexicano"],
+            "instagram": ["#InstagramEmpresarial", "#LogisticaMexicana"],
+            "tiktok": ["#TikTokNegocios", "#Camiones"],
+            "facebook": ["#FacebookEmpresarial", "#EmpresaMexicana"]
+        }
+        return hashtags_base + plataforma_hashtags.get(plataforma, [])
+
+    def generar_resumen_completo(self) -> str:
+        """Genera reportes en la carpeta datos/"""
+        resumen_texto = f"=== RESUMEN ALVAREZTRUCKING1 - REDES SOCIALES ===\n"
+        resumen_texto += f"Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
+
+        # Datos de la empresa
+        resumen_texto += "--- DATOS EMPRESARIALES ---\n"
+        resumen_texto += f"Nombre: {self.datos_empresa['nombre']}\n"
+        resumen_texto += f"Rubro: {self.datos_empresa['rubro']}\n"
+        resumen_texto += f"Contacto: {self.datos_empresa['contacto']['telefono']} | {self.datos_empresa['contacto']['correo']}\n\n"
+
+        # Datos de perfiles
+        resumen_texto += "--- PERFILES POR PLATAFORMA ---\n"
+        for plataforma, datos in self.datos_perfiles.items():
+            resumen_texto += f"\n> {plataforma.upper()}\n"
+            resumen_texto += f"  Usuario: {datos['nombre_usuario']}\n"
+            resumen_texto += f"  Seguidores: {datos['seguidores']}\n"
+            resumen_texto += f"  Hashtags: {' '.join(datos['hashtags_destacados'])}\n"
+
+        # Guardar archivos
+        nombre_archivo = f"resumen_{self.nombre_principal}_{datetime.now().strftime('%Y%m%d')}"
+        with open(os.path.join(RUTA_DATOS, f"{nombre_archivo}.txt"), "w", encoding="utf-8") as f_txt:
+            f_txt.write(resumen_texto)
+        
+        with open(os.path.join(RUTA_DATOS, f"{nombre_archivo}.json"), "w", encoding="utf-8") as f_json:
+            json.dump({
+                "empresa": self.datos_empresa,
+                "perfiles": self.datos_perfiles
+            }, f_json, indent=2, ensure_ascii=False)
+
+        return resumen_texto
+
+
+# -------------------------- CLASE: GENERADOR DE PUBLICACIONES --------------------------
+class GeneradorPublicaciones:
+    """Genera plantillas adaptadas a la empresa"""
+    def __init__(self):
+        self.config = CargadorConfiguracion.cargar()
+        self.plantillas: Dict[str, Dict] = {
+            "kwai": {
+                "servicio": "📦 Ofrecemos {servicio} en {ubicacion}!\nContáctanos: {telefono}\n{hashtags}",
+                "novedad": "🚚 ¡Nueva unidad en nuestra flota! 🎉\nMás capacidad para tu mercancía\n{hashtags}",
+                "testimonio": "🙌 Cliente {cliente}: {comentario}\nGracias por confiar en nosotros!\n{hashtags}"
+            },
+            "instagram": {
+                "foto_flota": "📸 Conoce nuestra flota de camiones\n{descripcion}\n{hashtags}\n📞 {telefono}",
+                "oferta": "📢 OFERTA ESPECIAL! Descuento en envíos a {destino}\nValido hasta {fecha_limite}\n{hashtags}",
+                "reel": "¿Cómo gestionamos tus envíos? 🎬 Mira nuestro proceso\n{hashtags}"
+            },
+            "tiktok": {
+                "flota": "Conoce nuestras unidades 🚚💨\n{contenido}\n{hashtags}",
+                "tutorial": "¿Cómo preparar tu mercancía? 📦\n{contenido}\n{hashtags}",
+                "evento": "¡Estuvimos en {evento}! 🤝 Conociendo aliados\n{hashtags}"
+            },
+            "facebook": {
+                "publicacion": "✅ {servicio} confiable en {ubicacion}\n{descripcion}\nCotiza aquí: {correo}\n{hashtags}",
+                "evento": "📅 ¡Feria de Logística de Saltillo! 📍 Stand {stand}\nFecha: {fecha}\nVisítanos!\n{hashtags}",
+                "aviso": "⚠️ Aviso: Horarios especiales en {periodo}\n{informacion}\n{hashtags}"
+            }
+        }
+
+    def crear_publicacion(self, plataforma: str, tipo: str, **kwargs) -> str:
+        """Genera publicación con datos de la empresa"""
+        plataforma = plataforma.lower()
+        if plataforma not in self.plantillas or tipo not in self.plantillas[plataforma]:
+            return "[ERROR] Tipo o plataforma no válidos"
+
+        # Agregar datos de la empresa si no se proporcionan
+        kwargs.setdefault("telefono", self.config["contacto"]["telefono"])
+        kwargs.setdefault("correo", self.config["contacto"]["correo"])
+        kwargs.setdefault("hashtags", " ".join([
+            "#AlvarezTrucking1", "#Transporte", "#Logistica", f"#{plataforma.capitalize()}"
+        ]))
+
+        return self.plantillas[plataforma][tipo].format(**kwargs)
+
+
+# -------------------------- EJECUCIÓN PRINCIPAL --------------------------
+if __name__ == "__main__":
+    print("=== INICIANDO GESTIÓN ALVAREZTRUCKING1 ===")
+
+    # 1. Cargar y analizar datos
+    analizador = AnalizadorRedesSociales()
+    analizador.cargar_datos_empresa()
+    
+    # Cargar métricas de redes sociales
+    analizador.cargar_datos_perfil("Kwai", 2800, 150, 12500)
+    analizador.cargar_datos_perfil("Instagram", 5400, 320, 38200)
+    analizador.cargar_datos_perfil("TikTok", 3900, 210, 26700)
+    analizador.cargar_datos_perfil("Facebook", 4200, 180, 23100)
+
+    # Generar resumen
+    print("\n--- RESUMEN GENERADO ---")
+    print(analizador.generar_resumen_completo())
+    print(f"\nReportes guardados en: {RUTA_DATOS}")
+
+    # 2. Generar ejemplos de publicaciones
+    generador = GeneradorPublicaciones()
+    print("\n--- EJEMPLOS DE PUBLICACIONES ---")
+    
+    pub_insta = generador.crear_publicacion(
+        plataforma="Instagram",
+        tipo="foto_flota",
+        descripcion="Unidades equipadas con tecnología de seguimiento GPS para mayor seguridad",
+        hashtags="#AlvarezTrucking1 #Transporte #Logistica #Saltillo #FlotaModerna"
+    )
+    print("> INSTAGRAM:\n", pub_insta, "\n")
+
+    pub_tiktok = generador.crear_publicacion(
+        plataforma="TikTok",
+        tipo="tutorial",
+        contenido="Empaqueta tu mercancía con materiales resistentes y etiqueta claramente el destino",
+        hashtags="#AlvarezTrucking1 #TikTok #Logistica #Consejos #Transporte"
+    )
+    print("> TIKTOK:\n", pub_tiktok)
+
+    print("\n=== PROCESO COMPLETADO ===")
