@@ -377,4 +377,195 @@ if __name__ == "__main__":
     print("> TIKTOK:\n", pub_tiktok)
 
     print("\n=== PROCESO COMPLETADO ===")
+// IMPORTANTE: Primero instala las dependencias necesarias:
+// Ejecuta en tu terminal: npm install @google/generative-ai wavefile
+
+// Importamos las bibliotecas requeridas
+import { GoogleGenerativeAI, Modality } from "@google/generative-ai";
+import * as fs from "node:fs";
+import pkg from "wavefile";
+const { WaveFile } = pkg;
+
+// CONFIGURA TU CLAVE DE API AQUÍ (la obtienes en Google AI Studio)
+const API_KEY = "TU_CLAVE_DE_API_DE_GEMINI_AQUI";
+const ai = new GoogleGenerativeAI(API_KEY);
+
+// Definimos el modelo especializado en audio y funciones
+const modelo = "gemini-2.5-flash-native-audio";
+
+// ------------------------------
+// FUNCIONES QUE PUEDES CONTROLAR
+// ------------------------------
+// Agrega aquí más funciones según las necesidades de AlvarezTrucking1App
+const encender_luces = { 
+  name: "encender_luces",
+  description: "Enciende las luces del camión o la oficina",
+  parameters: {
+    type: "object",
+    properties: {
+      ubicacion: {
+        type: "string",
+        description: "Ubicación de las luces: camion-123, oficina-central, etc."
+      }
+    },
+    required: ["ubicacion"]
+  }
+};
+
+const apagar_luces = { 
+  name: "apagar_luces",
+  description: "Apaga las luces del camión o la oficina",
+  parameters: {
+    type: "object",
+    properties: {
+      ubicacion: {
+        type: "string",
+        description: "Ubicación de las luces: camion-123, oficina-central, etc."
+      }
+    },
+    required: ["ubicacion"]
+  }
+};
+
+// Agregamos las funciones a las herramientas del modelo
+const herramientas = [{ 
+  functionDeclarations: [encender_luces, apagar_luces] 
+}];
+
+// Configuración: el modelo responderá en formato de audio
+const configuracion = {
+  responseModalities: [Modality.AUDIO],
+  tools: herramientas
+};
+
+// ------------------------------
+// FUNCIONES DE MANEJO DE SESION
+// ------------------------------
+async function sesionEnTiempoReal() {
+  const colaRespuestas = [];
+
+  // Espera hasta que llegue un mensaje nuevo
+  async function esperarMensaje() {
+    let listo = false;
+    let mensaje = undefined;
+    while (!listo) {
+      mensaje = colaRespuestas.shift();
+      if (mensaje) {
+        listo = true;
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+    return mensaje;
+  }
+
+  // Procesa todos los mensajes recibidos
+  async function procesarMensajes() {
+    const mensajesProcesados = [];
+    let listo = false;
+    while (!listo) {
+      const mensaje = await esperarMensaje();
+      mensajesProcesados.push(mensaje);
+      
+      // Termina si llega contenido del servidor o una llamada a función
+      if (mensaje.serverContent || mensaje.toolCall) {
+        listo = true;
+      }
+    }
+    return mensajesProcesados;
+  }
+
+  // ------------------------------
+  // CONECTAMOS CON EL MODELO
+  // ------------------------------
+  const sesion = await ai.live.connect({
+    model: modelo,
+    callbacks: {
+      onopen: () => {
+        console.log("✅ Conexión con Gemini establecida");
+      },
+      onmessage: (mensaje) => {
+        colaRespuestas.push(mensaje);
+        console.log("📩 Nuevo mensaje recibido");
+      },
+      onerror: (error) => {
+        console.error("❌ Error en la sesión:", error.message);
+      },
+      onclose: (razon) => {
+        console.log("🔌 Sesión cerrada. Razón:", razon.reason);
+      },
+    },
+    config: configuracion,
+  });
+
+  // ------------------------------
+  // ENVÍA TU INSTRUCCIÓN AQUÍ
+  // ------------------------------
+  const instruccionUsuario = "Por favor enciende las luces del camión con placa CAM-789";
+  console.log(`💬 Enviando instrucción: ${instruccionUsuario}`);
+  sesion.sendClientContent({ turns: [{ parts: [{ text: instruccionUsuario }] }] });
+
+  // Procesamos las respuestas del modelo
+  let mensajes = await procesarMensajes();
+
+  // Manejo de llamadas a funciones
+  for (const mensaje of mensajes) {
+    if (mensaje.toolCall) {
+      console.log("🛠️ Se llamó a una herramienta!");
+      const respuestasFunciones = [];
+      
+      for (const llamada of mensaje.toolCall.functionCalls) {
+        console.log(`▶️ Ejecutando función: ${llamada.name}`);
+        // Aquí puedes agregar el código real para controlar dispositivos
+        respuestasFunciones.push({
+          id: llamada.id,
+          name: llamada.name,
+          response: { 
+            resultado: "ok",
+            mensaje: `Función ${llamada.name} ejecutada correctamente en ${llamada.args.ubicacion}`
+          }
+        });
+      }
+
+      // Enviamos la respuesta de la función al modelo
+      console.log("📤 Enviando respuesta de la herramienta...");
+      sesion.sendToolResponse({ functionResponses: respuestasFunciones });
+    }
+  }
+
+  // Obtenemos y guardamos la respuesta de audio
+  mensajes = await procesarMensajes();
+  const audioCombinado = mensajes.reduce((acumulador, mensaje) => {
+    if (mensaje.data) {
+      const buffer = Buffer.from(mensaje.data, "base64");
+      const arrayEnteros = new Int16Array(buffer.buffer);
+      return acumulador.concat(Array.from(arrayEnteros));
+    }
+    return acumulador;
+  }, []);
+
+  // Guardamos el archivo de audio en tu computadora
+  if (audioCombinado.length > 0) {
+    const archivoAudio = new WaveFile();
+    archivoAudio.fromScratch(1, 24000, "16", audioCombinado);
+    fs.writeFileSync("respuesta_alvareztrucking.wav", archivoAudio.toBuffer());
+    console.log("🎧 Archivo de audio guardado como: respuesta_alvareztrucking.wav");
+  }
+
+  // Cerramos la sesión
+  sesion.close();
+}
+
+// ------------------------------
+// EJECUTAMOS EL PROGRAMA
+// ------------------------------
+async function main() {
+  try {
+    await sesionEnTiempoReal();
+  } catch (error) {
+    console.error("❌ Error general del programa:", error.message);
+  }
+}
+
+main();
 
