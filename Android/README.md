@@ -1,3 +1,29 @@
+package com.alvareztrucking1.app.data
+
+import com.google.gson.annotations.SerializedName
+
+// Modelos de datos para la configuración
+data class Configuracion(
+    @SerializedName("nombre_empresa") val nombreEmpresa: String,
+    @SerializedName("rubro") val rubro: String,
+    @SerializedName("direccion") val direccion: String,
+    @SerializedName("servicios") val servicios: String,
+    @SerializedName("contacto") val contacto: Contacto,
+    @SerializedName("redes_sociales") val redesSociales: RedesSociales
+)
+
+data class Contacto(
+    @SerializedName("telefono") val telefono: String,
+    @SerializedName("correo") val correo: String,
+    @SerializedName("sitio_web") val sitioWeb: String
+)
+
+data class RedesSociales(
+    @SerializedName("kwai") val kwai: String,
+    @SerializedName("instagram") val instagram: String,
+    @SerializedName("tiktok") val tiktok: String,
+    @SerializedName("facebook") val facebook: String
+)
 # Python for Android
 
 These instructions are only needed if you're planning to compile Python for
