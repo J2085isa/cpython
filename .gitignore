@@ -171,3 +171,246 @@ Python/frozen_modules/MANIFEST
 
 # main branch only: ABI files are not checked/maintained.
 Doc/data/python*.abi
+# -*- coding: utf-8 -*-
+"""
+PROYECTO INTEGRAL: GESTIÓN Y OPTIMIZACIÓN DE REDES SOCIALES "J/AA" Y "alvareztrucking1"
+Descripción: Script único que integra análisis de perfiles, generación de publicaciones
+             y gestión de datos para Kwai, Instagram, TikTok y Facebook - incluye perfiles
+             personales y empresariales (alvareztrucking1).
+Autor: [Tu nombre]
+Fecha: 2026-01-07
+Versión: 1.1
+"""
+
+import json
+from datetime import datetime
+from typing import Dict, Optional
+
+
+# -------------------------- CLASE: ANALIZADOR DE PERFILES --------------------------
+class AnalizadorRedesSociales:
+    """Clase para analizar y almacenar datos de perfiles y equipos de redes sociales"""
+    
+    def __init__(self, nombre_principal: str, id_equipo: Optional[int] = None, es_empresarial: bool = False):
+        self.nombre_principal = nombre_principal
+        self.id_equipo = id_equipo
+        self.es_empresarial = es_empresarial
+        self.datos_perfiles: Dict[str, Dict] = {}
+        self.datos_equipo: Dict = {}
+        self.datos_empresa: Dict = {}
+
+    def cargar_datos_perfil(self, plataforma: str, seguidores: int, siguiendo: int, me_gusta: int, descripcion: str):
+        """Carga información detallada de un perfil por plataforma"""
+        self.datos_perfiles[plataforma.lower()] = {
+            "nombre_usuario": self.nombre_principal if (plataforma.lower() == "kwai" and not self.es_empresarial) else f"@{self.nombre_principal.lower()}",
+            "seguidores": seguidores,
+            "siguiendo": siguiendo,
+            "me_gusta_totales": me_gusta,
+            "descripcion": descripcion,
+            "fecha_analisis": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "hashtags_destacados": self._obtener_hashtags(plataforma)
+        }
+
+    def cargar_datos_equipo(self, nombre_equipo: str, miembros_actuales: int, max_miembros: int, clasificacion: str):
+        """Carga información del equipo asociado a los perfiles"""
+        if self.id_equipo and not self.es_empresarial:
+            self.datos_equipo = {
+                "id_equipo": self.id_equipo,
+                "nombre_equipo": nombre_equipo,
+                "miembros_actuales": miembros_actuales,
+                "miembros_max": max_miembros,
+                "clasificacion": clasificacion,
+                "descripcion": "Espacio para compartir momentos diarios y desahogarse de frustraciones cotidianas"
+            }
+
+    def cargar_datos_empresa(self, rubro: str, direccion: str, servicio: str, contacto: str):
+        """Carga información de la empresa (para perfiles empresariales como alvareztrucking1)"""
+        if self.es_empresarial:
+            self.datos_empresa = {
+                "rubro": rubro,
+                "direccion": direccion,
+                "servicios_ofrecidos": servicio,
+                "contacto_principal": contacto,
+                "horario_atencion": "Lunes a Viernes: 08:00 - 18:00 | Sábados: 09:00 - 14:00"
+            }
+
+    def _obtener_hashtags(self, plataforma: str) -> list:
+        """Devuelve hashtags personalizados por plataforma y tipo de perfil"""
+        if self.es_empresarial:
+            hashtags_base = ["#AlvarezTrucking1", "#Transporte", "#Logistica"]
+            plataforma_hashtags = {
+                "kwai": ["#KwaiEmpresarial", "#TransporteMexicano"],
+                "instagram": ["#InstagramEmpresarial", "#LogisticaCoahuila"],
+                "tiktok": ["#TikTokNegocios", "#Camiones"],
+                "facebook": ["#FacebookEmpresarial", "#Saltillo"]
+            }
+        else:
+            hashtags_base = ["#DiarioDeVivir", "#JA_AA"]
+            plataforma_hashtags = {
+                "kwai": ["#Kwai", "#VidaCotidiana"],
+                "instagram": ["#Instagram", "#BlogPersonal"],
+                "tiktok": ["#TikTok", "#Cotidiano"],
+                "facebook": ["#Facebook", "#ComunidadJA_AA"]
+            }
+        return hashtags_base + plataforma_hashtags.get(plataforma.lower(), [])
+
+    def generar_resumen_completo(self) -> str:
+        """Genera y guarda un resumen en texto y JSON con todos los datos"""
+        # Crear resumen en texto
+        tipo_perfil = "EMPRESARIAL" if self.es_empresarial else "PERSONAL"
+        resumen_texto = f"=== RESUMEN COMPLETO DE REDES SOCIALES: {self.nombre_principal} ({tipo_perfil}) ===\n"
+        resumen_texto += f"Fecha de análisis: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
+
+        # Agregar datos de empresa o equipo
+        if self.es_empresarial and self.datos_empresa:
+            resumen_texto += "--- DATOS DE LA EMPRESA ---\n"
+            resumen_texto += f"Rubro: {self.datos_empresa['rubro']}\n"
+            resumen_texto += f"Dirección: {self.datos_empresa['direccion']}\n"
+            resumen_texto += f"Servicios: {self.datos_empresa['servicios_ofrecidos']}\n"
+            resumen_texto += f"Contacto: {self.datos_empresa['contacto_principal']}\n"
+            resumen_texto += f"Horario: {self.datos_empresa['horario_atencion']}\n\n"
+        elif self.datos_equipo:
+            resumen_texto += "--- DATOS DEL EQUIPO ---\n"
+            resumen_texto += f"ID: {self.datos_equipo['id_equipo']}\n"
+            resumen_texto += f"Nombre: {self.datos_equipo['nombre_equipo']}\n"
+            resumen_texto += f"Miembros: {self.datos_equipo['miembros_actuales']}/{self.datos_equipo['miembros_max']}\n"
+            resumen_texto += f"Clasificación: {self.datos_equipo['clasificacion']}\n\n"
+
+        # Agregar datos de cada perfil
+        resumen_texto += "--- DATOS DE PERFILES POR PLATAFORMA ---\n"
+        for plataforma, datos in self.datos_perfiles.items():
+            resumen_texto += f"\n> PLATAFORMA: {plataforma.upper()}\n"
+            resumen_texto += f"  Usuario: {datos['nombre_usuario']}\n"
+            resumen_texto += f"  Seguidores: {datos['seguidores']}\n"
+            resumen_texto += f"  Siguiendo: {datos['siguiendo']}\n"
+            resumen_texto += f"  Me gusta totales: {datos['me_gusta_totales']}\n"
+            resumen_texto += f"  Descripción: {datos['descripcion']}\n"
+            resumen_texto += f"  Hashtags destacados: {' '.join(datos['hashtags_destacados'])}\n"
+
+        # Crear resumen en JSON
+        resumen_json = json.dumps({
+            "informacion_general": {
+                "nombre_principal": self.nombre_principal,
+                "tipo_perfil": tipo_perfil,
+                "fecha_analisis": datetime.now().strftime("%Y-%m-%d %H:%M")
+            },
+            "datos_especificos": self.datos_empresa if self.es_empresarial else self.datos_equipo,
+            "perfiles": self.datos_perfiles
+        }, indent=2, ensure_ascii=False)
+
+        # Guardar archivos
+        nombre_archivo = f"resumen_redes_{self.nombre_principal.lower()}"
+        with open(f"{nombre_archivo}.txt", "w", encoding="utf-8") as f_txt:
+            f_txt.write(resumen_texto)
+        
+        with open(f"{nombre_archivo}.json", "w", encoding="utf-8") as f_json:
+            f_json.write(resumen_json)
+
+        return resumen_texto
+
+
+# -------------------------- CLASE: GENERADOR DE PUBLICACIONES --------------------------
+class GeneradorPublicaciones:
+    """Clase para crear plantillas de publicaciones adaptadas a cada plataforma y tipo de perfil"""
+    
+    def __init__(self, es_empresarial: bool = False):
+        self.es_empresarial = es_empresarial
+        self.plantillas_personales: Dict[str, Dict] = {
+            "kwai": {
+                "diario": "📅 Hoy he vivido esto: {contenido}\n{hashtags}",
+                "equipo": "🤝 Nuestro equipo {nombre_equipo} sigue creciendo! 🚀\nÚnete a nosotros a través del ID {id_equipo}\n{hashtags}",
+                "reflexion": "🤔 Aprendizaje del día: {contenido}\n{hashtags}"
+            },
+            "instagram": {
+                "foto": "✨ {descripcion}\n\n{hashtags}\n\nSíguenos en Kwai: @{usuario_kwai}",
+                "historia": "Aquí va lo último! 📸\n{contenido}\n{hashtags}",
+                "reel": "¿Qué opinas de este momento? 🎬\n{contenido}\n{hashtags}"
+            },
+            "tiktok": {
+                "video": "¿Te ha pasado esto? 🤔\n{contenido}\n{hashtags}",
+                "dueto": "Hice un dueto con @{usuario} 🤝\n{contenido}\n{hashtags}",
+                "trend": "Uníéndome a la tendencia! 🎵\n{contenido}\n{hashtags}"
+            },
+            "facebook": {
+                "publicacion": "📝 {contenido}\n\nComparte tu experiencia en los comentarios! 💬\n{hashtags}",
+                "evento": "📅 ¡Nuevo encuentro de la comunidad {nombre_equipo}!\nFecha: {fecha}\nLugar: En línea / {lugar}\n{hashtags}",
+                "album": "✨ Álbum de momentos destacados 📸\n{descripcion}\n{hashtags}"
+            }
+        }
+
+        self.plantillas_empresariales: Dict[str, Dict] = {
+            "kwai": {
+                "servicio": "📦 Ofrecemos {servicio} con la mejor calidad en {ubicacion}!\nContáctanos: {contacto}\n{hashtags}",
+                "novedad": "🚚 ¡Nueva unidad en nuestra flota! 🎉\nAhora contamos con más capacidad para tu mercancía\n{hashtags}",
+                "testimonio": "🙌 Opinión de nuestro cliente {cliente}: {comentario}\nGracias por confiar en nosotros!\n{hashtags}"
+            },
+            "instagram": {
+                "foto_flota": "📸 Conoce nuestra flota de camiones listos para trasladar tu mercancía\n{descripcion}\n{hashtags}\n\n📞 Contacto: {contacto}",
+                "historia_oferta": "¡Oferta especial esta semana! 📢\nDescuento en envíos a {destino}\n{hashtags}",
+                "reel_servicio": "¿Cómo gestionamos tus envíos? 🎬\nMira nuestro proceso completo\n{hashtags}"
+            },
+            "tiktok": {
+                "video_flota": "Conoce nuestras unidades 🚚💨\n{contenido}\n{hashtags}",
+                "video_tutorial": "¿Cómo preparar tu mercancía para el transporte? 📦\n{contenido}\n{hashtags}",
+                "video_evento": "¡Estuvimos en {evento}! 🤝\nConociendo nuevos clientes y aliados\n{hashtags}"
+            },
+            "facebook": {
+                "publicacion_servicio": "✅ {servicio} confiable y seguro en Coahuila y zonas aledañas\n{descripcion}\nContáctanos para cotizar: {contacto}\n{hashtags}",
+                "evento_empresa": "📅 ¡Participamos en la Feria de Logística de Saltillo!\nFecha: {fecha}\nVisítanos en nuestro stand {stand}\n{hashtags}",
+                "aviso_importante": "⚠️ Aviso importante sobre nuestros horarios en {periodo}\n{informacion}\n{hashtags}"
+            }
+        }
+
+    def crear_publicacion(self, plataforma: str, tipo: str, **kwargs) -> str:
+        """Genera una publicación usando la plantilla correspondiente"""
+        plataforma = plataforma.lower()
+        plantillas = self.plantillas_empresariales if self.es_empresarial else self.plantillas_personales
+
+        if plataforma not in plantillas:
+            return "[ERROR] Plataforma no soportada (opciones: Kwai, Instagram, TikTok, Facebook)"
+        
+        if tipo not in plantillas[plataforma]:
+            return f"[ERROR] Tipo de publicación no disponible para {plataforma} (opciones: {', '.join(plantillas[plataforma].keys())})"
+        
+        # Agregar hashtags si no se proporcionan
+        if "hashtags" not in kwargs:
+            if self.es_empresarial:
+                kwargs["hashtags"] = " ".join(["#AlvarezTrucking1", "#Transporte", "#Logistica", f"#{plataforma.capitalize()}"])
+            else:
+                kwargs["hashtags"] = " ".join(["#DiarioDeVivir", "#JA_AA", f"#{plataforma.capitalize()}"])
+        
+        return plantillas[plataforma][tipo].format(**kwargs)
+
+
+# -------------------------- CLASE: DEFINICION DE PERFILES --------------------------
+class DefinidorPerfiles:
+    """Clase que contiene la estructura completa de cada perfil de red social"""
+    
+    @staticmethod
+    def obtener_estructura_perfiles(nombre_principal: str, id_equipo: Optional[int] = None, es_empresarial: bool = False) -> Dict[str, Dict]:
+        """Devuelve la configuración detallada de cada perfil"""
+        if es_empresarial:
+            return {
+                "kwai": {
+                    "nombre_usuario": f"@{nombre_principal.lower()}",
+                    "categoria": "Transporte y logística",
+                    "descripcion": f"{nombre_principal} - Servicios de transporte terrestre y logística integral en Saltillo, Coahuila 🚚 | Envíos seguros y puntuales | Contáctanos: +52 (844) XXX-XXXX",
+                    "enlace_externo": "https://alvareztrucking1.com.mx"
+                },
+                "instagram": {
+                    "nombre_usuario": f"@{nombre_principal.lower()}",
+                    "nombre_completo": f"{nombre_principal} - Transporte y Logística",
+                    "biografia": f"🚚 Servicios de transporte terrestre y logística en Saltillo y toda México\n✅ Seguridad | Puntualidad | Precios competitivos\n📞 Contacto: +52 (844) XXX-XXXX\n🌐 Sitio web: https://alvareztrucking1.com.mx\n#AlvarezTrucking1 #Transporte #Logistica",
+                    "historias_destacadas": ["📦 Servicios", "🚚 Flota", "🙌 Clientes", "📅 Eventos"],
+                    "enlace_externo": "https://alvareztrucking1.com.mx"
+                },
+                "tiktok": {
+                    "nombre_usuario": f"@{nombre_principal.lower()}",
+                    "descripcion": f"{nombre_principal} - Transporte y logística en Coahuila 🚚 | Conoce nuestra flota, servicios y consejos de logística | Contáctanos para cotizaciones!",
+                    "categoria": "Negocios y empresas",
+                    "enlace_externo": "https://alvareztrucking1.com.mx"
+                },
+                "facebook": {
+                    "nombre_pagina": f"{nombre_principal} - Transporte y Logística",
+                    "tipo_pagina": "Empresa de transporte / Logística",
+                    "descripcion": f"{nombre_principal} ofrece servicios de transporte terrestre y logística integral en Saltillo, Coahuila y zonas aledañas. Contamos con una flota moderna y personal capacitado para garantizar la seguridad y puntualidad de tus envíos 🚚\n📞 Contacto: +52 (844) XXX-XXXX\n🌐 Sitio web: https://alvareztrucking1.com.mx\n📧 Correo: contacto@alvareztr
