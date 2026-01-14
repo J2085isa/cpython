@@ -1,1 +1,224 @@
-R28  3483834! _'(x  D viaj  eE19484-($(_+$wofjfbM     recuerd   os1838_+#$+$+dfkcndb   activacion#(_(__;384lddkfje$(_+"+$codi    goJAR  ;284838&! 48_#82@) $($+$  dkfkfjg    cdbAMENEFA193  83483#$(_(_+  skdjfjfenc    riptacionqoreidjffb#(_+"("! _2838_8__+ejacu  cionsiffkdjf   ie18383(__(*(#reprodu  cion12 93384? _(#$($(_! ask  dkfkfxn
+- script: |
+    choco install visualstudio2022-buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Component.Windows11SDK.22621"
+    choco install git python --yes
+  displayName: 'Instalar herramientas de compilación'
+  condition: not(exis- task: PublishBuildArtifacts@1
+  displayName: 'Publicar registros de compilación'
+  inputs:
+    pathtoPublish: '$(Py_IntDir)'
+    artifactName: 'Build-Logs'
+  condition: failed()
+ts('C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools'))
+R28  3483834! _'(x  D viaj  eE19484-($(_+$wofjfbM     recuerd   os1838_+#$+$+dfkcndb   activacion#(_(__;384ldd- powershell: |
+    Write-Host '##vso[task.setvariable variable=buildOpt]$(buildOpt) --enable-tkinter --enable-sqlite3'
+  displayName: 'Habilitar módulos opcionales'
+kfje$(_+"+$codi    goJAR  ;284838&! 48_#82@) $($+$  dkfkfjg    cdbAMENEFA193  83483#$(_(_+  skdjfjfenc    riptacionqoreidjffb#(_+"("! _2838_8__+ejacu  cionsiffkdjf   ie18383(__(*(#reprodu  cion12 93384? _(#$($(_! ask  dkfkfxn- powershell: |
+    Write-Host '##vso[task.setvariable variable=arch]x64'  # O x86 según necesidad
+  displayName: trigger:
+  branches:
+    include: [main, releases/*]  # Automatizar en cambios de ramas clave
+  tags:
+    include: [v*]  # Automatizar en creacion de tags de version
+
+pr:
+  branches:
+    include: [main]  # Ejecutar en pull requests
+
+variables:
+  - name: cleanBuild
+    value: 'false'
+  - name: runStyleChecks
+    value: 'true'
+  - name: generateInstaller
+    value: 'true'
+  - name: testRunPlatform
+    value: 'Windows'
+  - name: testRunTitle
+    value: 'CPython Build & Tests'
+  - name: arch
+    value: 'x64'
+  - name: buildOpt
+    value: '--release'
+
+stages:
+- stage: Preparacion
+  jobs:
+  - job: InstalarHerramientas
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - script: |
+          @echo off
+          choco install visualstudio2022-buildtools git python --yes --no-progress
+          choco install openssl zlib --yes --no-progress
+        displayName: 'Instalar dependencias de compilacion'
+
+      - powershell: |
+          # Configurar rutas de herramientas
+          Write-Host '##vso[task.setvariable variable=PATH]C:\Program Files\Git\bin;C:\Python311\Scripts;$(PATH)'
+          # Definir ubicaciones de build
+        from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from sqlalchemy import create_engine, Column, String, UUID, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from datetime import datetime
+import uuid
+
+app = FastAPI(title="API de Gestión de Repositorios y Builds")
+engine = create_engine("sqlite:///gestion_repos.db")
+Base = declarative_base()
+
+# Modelo de datos
+class Build(Base):
+    __tablename__ = "builds"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    build_id = Column(String, unique=True, nullable=False)
+    version = Column(String, nullable=False)
+    arch = Column(String, nullable=False)
+    estado = Column(String, nullable=False)
+    ruta_archivos = Column(String, nullable=False)
+    fecha_registro = Column(DateTime, default=datetime.utcnow)
+
+Base.metadata.create_all(bind=engine)
+
+class BuildRegistro(BaseModel):
+    buildId: str
+    version: str
+    arch: str
+    estado: str
+    rutaArchivos: str
+
+@app.post("/v1/archivado/registrar")
+async def registrar_build(build: BuildRegistro):
+    from sqlalchemy.orm import sessionmaker
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    
+    # Verificar si ya existe
+    build_existente = session.query(Build).filter_by(build_id=build.buildId).first()
+    if build_existente:
+        raise HTTPException(status_code=400, detail="El build ya está registrado")
+    
+    nuevo_build = Build(
+        build_id=build.buildId,
+        version=build.version,
+        arch=build.arch,
+        estado=build.estado,
+        ruta_archivos=build.rutaArchivos
+    )
+    session.add(nuevo_build)
+    session.commit()
+    return {"mensaje": "Build registrado exitosamente", "id": str(nuevo_build.id)}
+  Write-Host '##vso[task.setvariable variable=Py_IntDir]$(Build.BinariesDirectory)\obj\$(arch)'
+          Write-Host '##vso[task.setvariable variable=Py_OutDir]$(Build.BinariesDirectory)\bin\$(arch)'
+          Write-Host '##vso[task.setvariable variable=EXTERNALS_DIR]$(Build.BinariesDirectory)\externals'
+          Write-Host '##vso[task.setvariable variable=INSTALLER_DIR]$(Build.BinariesDirectory)\installer'
+        displayName: 'Configurar variables de entorno'
+
+- stage: GestionRepositorio
+  jobs:
+  - job: ClonarYValidar
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - checkout: self
+        clean: $(cleanBuild)
+        fetchDepth: 5
+        displayName: 'Clonar repositorio'
+
+      - script: |
+          git config --global user.name "Bot de Compilacion"
+          git config --global user.email "bot@tu-dominio.com"
+          git fetch --tags
+        displayName: 'Configurar Git y obtener tags'
+
+      - script: python -m flake8 Lib\ --exit-zero
+        displayName: 'Comprobaciones de estilo (flake8)'
+        condition: eq(variables['runStyleChecks'], 'true')
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Archivar codigo fuente'
+        inputs:
+          pathtoPublish: '$(Build.SourcesDirectory)'
+          artifactName: 'CodigoFuente-$(Build.BuildNumber)'
+        condition: succeeded()
+
+- stage: Compilacion
+  dependsOn: [Preparacion, GestionRepositorio]
+  jobs:
+  - job: CompilarCPython
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - script: PCbuild\build.bat -e $(buildOpt) --arch $(arch)
+        displayName: 'Compilar CPython'
+        env:
+          IncludeUwp: true
+          Py_IntDir: $(Py_IntDir)
+          Py_OutDir: $(Py_OutDir)
+          EXTERNALS_DIR: $(EXTERNALS_DIR)
+
+      - script: $(Py_OutDir)\python.exe -m test.pythoninfo
+        displayName: 'Mostrar informacion de build'
+
+      - script: PCbuild\build.bat -e $(buildOpt) --arch $(arch) --installer
+        displayName: 'Generar instalador'
+        condition: eq(variables['generateInstaller'], 'true')
+        env:
+          INSTALLER_DIR: $(INSTALLER_DIR)
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Archivar build y instalador'
+        inputs:
+          pathtoPublish: '$(Build.BinariesDirectory)'
+          artifactName: 'BuildResultados-$(Build.BuildNumber)-$(arch)'
+        condition: succeeded()
+
+- stage: PruebasYArchivado
+  dependsOn: Compilacion
+  jobs:
+  - job: EjecutarPruebas
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - script: PCbuild\rt.bat -q -uall -u-cpu -rwW --slowest --timeout=1200 -j0 --junit-xml="$(Build.BinariesDirectory)\test-results.xml" --tempdir="$(Build.BinariesDirectory)\test"
+        displayName: 'Ejecutar pruebas'
+        env:
+          PREFIX: $(Py_OutDir)
+
+      - task: PublishTestResults@2
+        displayName: 'Publicar resultados de pruebas'
+        inputs:
+          testResultsFiles: '$(Build.BinariesDirectory)\test-results.xml'
+          mergeTestResults: true
+          testRunTitle: $(testRunTitle)
+          platform: $(testRunPlatform)
+        condition: succeededOrFailed()
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Archivar resultados de pruebas'
+        inputs:
+          pathtoPublish: '$(Build.BinariesDirectory)\test'
+          artifactName: 'PruebaResultados-$(Build.BuildNumber)'
+        condition: succeededOrFailed()
+
+      - script: |
+          curl -X POST "https://api-tu-dominio.com/v1/archivado/registrar" ^
+          -H "Content-Type: application/json" ^
+          -d "{\"buildId\":\"$(Build.BuildId)\", \"version\":\"$(Build.SourceBranchName)\", \"arch\":\"$(arch)\", \"estado\":\"$(Agent.JobStatus)\", \"rutaArchivos\":\"https://dev.azure.com/tu-org/_apis/build/builds/$(Build.BuildId)/artifacts\"}"
+        displayName: 'Notificar API de gestion'
+        condition: succeededOrFailed()
+'Configurar arquitectura de compilación'
+- script: PCbuild\clean.bat
+  displayName: 'Limpiar archivos de compilación anteriores'
+  condition: variables['cleanBuild'] == 'true'
+- script: PCbuild\build.bat -e $(buildOpt) --installer
+  displayName: 'Generar instalador de CPython'
+  condition: and(succeeded(), variables['generateInstaller'])
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicar instalador como artefacto'
+  inputs:
+    pathtoPublish: '$(Py_OutDir)\installer'
+    artifactName: 'CPython-Installer-$(arch)'
+  condition: and(succeeded(), variables['generateInstaller'])
