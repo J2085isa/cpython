@@ -1,4 +1,34 @@
-// 1. Estructura para datos del payload entre tarea y malla
+Descripción para Radame (proyecto "truk" - Shader de Malla)
+ 
+Este código implementa un sistema de shaders de tarea y malla (mesh/task shaders) compatible con wgpu, diseñado para renderizar geometría de forma eficiente mediante el uso de "meshlets" (pequeños grupos de triángulos). Forma parte del proyecto "truk" y está optimizado para generar y configurar primitivas de renderizado de manera programable, reemplazando los pipelines tradicionales de shaders de vértice.
+ 
+Funcionalidad principal
+ 
+- Shader de Tarea ( ts_main ): Configura datos compartidos para todos los shaders de malla del grupo de trabajo (como una máscara de color y un indicador de visibilidad), y define cuántos grupos de trabajo de malla se despacharán (en este caso, 1x1x1).
+
+- Shader de Malla ( ms_main ): Genera un triángulo completo, asignando posiciones y colores a sus vértices a partir de buffers de entrada. También configura propiedades de la primitiva (índices de vértice, activación de culling y datos per-primitive para el shader de fragmento).
+ 
+Componentes clave
+ 
+-  TaskPayload : Estructura que transmite datos entre el shader de tarea y el de malla, permitiendo configurar propiedades globales para cada grupo de geometría.
+
+-  MeshVertexOutput : Define la información de cada vértice (posición en espacio clip y color) que se envía al rasterizador.
+
+-  MeshPrimitiveOutput : Controla propiedades de la primitiva, como los índices de los vértices que la forman, si debe ser ocultada (culling) y datos no interpolados para el shader de fragmento.
+
+- Buffers de entrada: Se leen posiciones y colores de vértices desde memoria uniforme, adaptables a las necesidades específicas de los modelos 3D de "truk".
+ 
+Ventajas en el proyecto
+ 
+- Mayor flexibilidad en la generación de geometría en comparación con pipelines tradicionales.
+
+- Optimización para renderizado de meshlets, reduciendo el tráfico de memoria y mejorando el culling.
+
+- Compatibilidad con los estándares de WebGPU y los backends principales de wgpu (Vulkan, Metal, DX12).
+ 
+ 
+ 
+¿Quieres que la descripción sea más técnica (para documentación de código) o más general (para un README del repositorio)? ¡Avísame y la ajusto! 😊// 1. Estructura para datos del payload entre tarea y malla
 struct TaskPayload {
     colorMask: vec4<f32>,
     visible: bool,
