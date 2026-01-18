@@ -1,3 +1,78 @@
+// 1. Estructura para datos del payload entre tarea y malla
+struct TaskPayload {
+    colorMask: vec4<f32>,
+    visible: bool,
+};
+
+// 2. Estructura para salida de vértices (al rasterizador)
+struct MeshVertexOutput {
+    @builtin(position) position: vec4<f32>,
+    @location(0) color: vec4<f32>, // Location para pasar al fragment shader
+};
+
+// 3. Estructura para datos de cada primitiva
+struct MeshPrimitiveOutput {
+    @builtin(primitive_indices) indices: vec3<u32>,
+    @builtin(primitive_cull) cull: bool,
+    @location(1) colorMask: vec4<f32>, // Per-primitive data al fragment shader
+};
+
+// 4. Variable de grupo de trabajo
+var<workgroup> workgroupData: f32;
+
+// 5. Buffers de entrada (ajustados a tu proyecto si es necesario)
+@group(0) @binding(0)
+var<uniform> positions: array<vec4<f32>, 3>;
+
+@group(0) @binding(1)
+var<uniform> colors: array<vec4<f32>, 3>;
+
+
+// ------------------------------
+// Shader de Tarea
+// ------------------------------
+@task
+@payload(taskPayload: TaskPayload) // Especificar tipo del payload
+@workgroup_size(1)
+fn ts_main() -> @builtin(mesh_task_size) vec3<u32> {
+    workgroupData = 1.0;
+    
+    // Configurar datos para el mesh shader
+    taskPayload.colorMask = vec4(1.0, 1.0, 0.0, 1.0);
+    taskPayload.visible = true;
+    
+    // Dispatch: 1x1x1 workgroups para el mesh shader
+    return vec3(1u, 1u, 1u);
+}
+
+
+// ------------------------------
+// Shader de Malla
+// ------------------------------
+@mesh(
+    @builtin(mesh_vertices) vertices: array<MeshVertexOutput, 3>, // Máx 3 vértices
+    @builtin(mesh_primitives) primitives: array<MeshPrimitiveOutput, 1> // Máx 1 primitiva
+)
+@payload(taskPayload: TaskPayload) // Recibir payload de la tarea
+@workgroup_size(1)
+fn ms_main() {
+    workgroupData = 2.0;
+
+    // Configurar vértices
+    vertices[0].position = positions[0];
+    vertices[0].color = colors[0] * taskPayload.colorMask;
+
+    vertices[1].position = positions[1];
+    vertices[1].color = colors[1] * taskPayload.colorMask;
+
+    vertices[2].position = positions[2];
+    vertices[2].color = colors[2] * taskPayload.colorMask;
+    
+    // Configurar primitiva (triángulo)
+    primitives[0].indices = vec3<u32>(0u, 1u, 2u);
+    primitives[0].cull = !taskPayload.visible;
+    primitives[0].colorMask = vec4<f32>(1.0, 0.0, 1.0, 1.0);
+}
 📋 DESCRIPCIÓN COMPLETA DEL SISTEMA
  
  
