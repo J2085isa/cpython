@@ -1,3 +1,40 @@
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions, ClaudeAgentError  # Asumiendo que el SDK define esta excepción
+
+async def main():
+    # Definir opciones con herramientas permitidas
+    agent_options = ClaudeAgentOptions(
+        allowed_tools=["Read", "Edit", "Bash"],
+        # Se pueden agregar más opciones si el SDK las soporta (ej: timeout, nivel de detalle)
+    )
+
+    try:
+        print("Enviando solicitud al agente Claude para revisar auth.py...\n")
+        
+        # Consumir la secuencia de mensajes asincrónicos
+        async for message in query(
+            prompt="Find and fix the bug in auth.py. Incluye un resumen de los cambios realizados.",
+            options=agent_options
+        ):
+            # Diferenciar tipos de mensaje (ej: si el SDK incluye un campo 'type')
+            if hasattr(message, "type"):
+                print(f"[{message.type.upper()}] {message.content}\n")
+            else:
+                print(f"MENSAJE: {message}\n")
+
+        print("Proceso completado exitosamente.")
+
+    except ClaudeAgentError as e:
+        print(f"Error del agente Claude: {str(e)}")
+    except PermissionError:
+        print("Error: No se tienen permisos suficientes para leer/editar auth.py o ejecutar comandos Bash.")
+    except Exception as e:
+        print(f"Error inesperado: {str(e)}")
+    finally:
+        print("\nFinalizando sesión con el agente.")
+
+if __name__ == "__main__":
+    asyncio.run(main())
 Descripción para Radame (proyecto "truk" - Shader de Malla)
  
 Este código implementa un sistema de shaders de tarea y malla (mesh/task shaders) compatible con wgpu, diseñado para renderizar geometría de forma eficiente mediante el uso de "meshlets" (pequeños grupos de triángulos). Forma parte del proyecto "truk" y está optimizado para generar y configurar primitivas de renderizado de manera programable, reemplazando los pipelines tradicionales de shaders de vértice.
