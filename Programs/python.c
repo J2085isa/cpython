@@ -1,3 +1,18 @@
+system:
+  name: "Centinela-Q"
+  encryption: "CRYSTALS-Kyber-1024"
+  legal_framework: "CPEUM_Mexico_2026"
+
+global_firewall:
+  antivirus_mode: "Mirror_Fire_Active"
+  ghost_mode: "Enabled"
+  vibration_lock: "ACTIVE"
+
+automatic_actions:
+  on_unauthorized_look: 
+    - take_snapshot
+    - upload_to_collective_network
+    - shred_local_keys
 {
   "quantum_tunnel_status": {
     "connection": "ENTANGLED",
