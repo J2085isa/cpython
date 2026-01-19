@@ -1,3 +1,21 @@
+// api_gateway/tunnel_manager.js
+const { QuantumLayer } = require('./pqc_lib');
+
+// 80% Quantum / 20% Legible
+async function establishTunnel(vibeKey) {
+    const tunnel = await QuantumLayer.createEntanglement();
+    
+    tunnel.on('decoherence_alert', (incident) => {
+        // Si la coherencia cae, alguien está mirando
+        console.log("ALERTA MUNDIAL: Intento de observación detectado.");
+        
+        // Ejecuta el código de captura de foto del repositorio
+        require('../evidence_vault/trigger_snapshot').execute();
+        
+        // El firewall bloquea el nodo comprometido
+        tunnel.isolateNode(incident.origin);
+    });
+}
 # core_quantum/vibration_encoder.py
 import numpy as np
 
