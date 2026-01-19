@@ -1,3 +1,22 @@
+/CENTINELA-Q-GLOBAL
+│
+├── .config/
+│   ├── ghost_mode.json          # Configuración del Modo Fantasma y Señuelos
+│   └── mission_control.yaml     # Reglas de la Constitución MX (Art. 16/21)
+│
+├── /core_quantum (Python)
+│   ├── vibration_encoder.py     # Transductor de tu vibración a Qubits
+│   ├── mirror_firewall.py       # El Antivirus Global / Mirror Fire
+│   └── bio_personality.py       # Analizador de "Personalidad Normal"
+│
+├── /api_gateway (Node.js)
+│   ├── tunnel_manager.js        # Gestión de canales entrelazados
+│   └── secure_comms.js          # API para mensajes y llamadas PQC
+│
+├── /evidence_vault
+│   └── trigger_snapshot.py      # Módulo de captura y subida colectiva
+│
+└── README.md                    # Protocolo de Operación Mundial
 import asyncio
 from claude_agent_sdk import query, ClaudeAgentOptions, ClaudeAgentError  # Asumiendo que el SDK define esta excepción
 
