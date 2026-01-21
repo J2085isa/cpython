@@ -1,4 +1,20 @@
-// Estructura de la transacción con el código proporcionado
+const axios = require('axios');
+
+async function consultarRegulacionERISA() {
+    try {
+        // Usamos el endpoint oficial para desarrolladores
+        const url = 'https://www.federalregister.gov/api/v1/documents.json?conditions[term]=ERISA+4044';
+
+        const response = await axios.get(url);
+
+        // Aquí procesamos los datos legalmente
+        console.log("Datos regulatorios actualizados recibidos.");
+        return response.data;
+    } catch (error) {
+        console.error("Error al acceder a la API oficial:", error.message);
+    }
+}
+{ headers: { 'User-Agent': 'MiAppFinanciera/1.0 (contacto@tu-email.com)' } }{// Estructura de la transacción con el código proporcionado
 const transferenciaInfo = {
     monto: 500.00,
     moneda: "MXN",
