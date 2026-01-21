@@ -1,3 +1,9 @@
+{
+  "monitor_silencio": "ACTIVO",
+  "visibilidad_nodos": "INVISIBLE",
+  "alerta_infractores": "CONFIGURADA_VIBRACION",
+  "transparencia_publica": "AUTOMATIZADA"
+}
 /CENTINELA-Q-GLOBAL
 │
 ├── .config/
