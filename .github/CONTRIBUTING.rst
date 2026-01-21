@@ -1,3 +1,61 @@
+const axios = require('axios');
+require('dotenv').config();
+
+async function getBBVAToken() {
+    const credentials = Buffer.from(`${process.env.BBVA_CLIENT_ID}:${process.env.BBVA_CLIENT_SECRET}`).toString('base64');
+    
+    try {
+        const response = await axios.post('https://api.bbva.com/token?grant_type=client_credentials', {}, {
+            headers: { 'Authorization': `Basic ${credentials}` }
+        });
+        return response.data.access_token;
+    } catch (error) {
+        console.error("Error obteniendo token de BBVA");
+    }
+}
+async function realizarTransferenciaBBVA(monto, cuentaDestino, concepto) {
+    const token = await getBBVAToken();
+    
+    const transferData = {
+        sender: {
+            bic: "BCMRMXMMPYM" // Tu identificador BBVA
+        },
+        beneficiary: {
+            account: cuentaDestino,
+            name: "Nombre del Destinatario"
+        },
+        amount: {
+            currency: "MXN",
+            value: monto
+        },
+        concept: concepto
+    };
+
+    try {
+        const res = await axios.post('https://api.bbva.com/v1/payments/transfers', transferData, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        console.log("Transferencia exitosa ID:", res.data.id);
+        return res.data;
+    } catch (error) {
+        console.error("Error en la transacción BBVA:", error.response.data);
+    }
+}
+const cron = require('node-cron');
+
+// Se ejecuta automáticamente cada lunes a las 8:00 AM
+cron.schedule('0 8 * * 1', async () => {
+    console.log("Iniciando ciclo de pagos automáticos...");
+    
+    // 1. Aquí buscarías en tu base de datos: SELECT * FROM pagos_pendientes
+    const pagosPendientes = [
+        { monto: 1500.00, cuenta: "012180012345678901", concepto: "Pago Proveedor" }
+    ];
+
+    for (let pago of pagosPendientes) {
+        await realizarTransferenciaBBVA(pago.monto, pago.cuenta, pago.concepto);
+    }
+});
 Contributing to Python
 ======================
 
