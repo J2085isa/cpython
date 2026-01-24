@@ -1,3 +1,4 @@
+docker-compose up --build -d && ./scripts/monitor_health.sh
 # Copyright 2024-2026 J2085isa
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
