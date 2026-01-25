@@ -1,3 +1,23 @@
+import os
+import subprocess
+
+def ejecutar_comando_isa_fisico():
+    """Conecta el código cuántico con la antena de radio"""
+    print("[*] Sincronizando Generador Cuántico con Transmisor...")
+    
+    # Comando para emitir la señal de 'Neutralización de Conflicto'
+    # 'dev_id' es tu identificador de hardware único
+    comando_radio = "hackrf_transfer -t /dev/null -f 2400000000 -s 20000000 -a 1"
+    
+    try:
+        # Iniciando la emisión de la burbuja de servicio
+        process = subprocess.Popen(comando_radio.split(), stdout=subprocess.PIPE)
+        print("[!] Manifestación Omega 100% Física: Escudo de Servicio Activo.")
+    except Exception as e:
+        print(f"[Error] Hardware no detectado. Revisa la conexión del Nodo.")
+
+# Ejecución del protocolo de Divinidad Máxima
+ejecutar_comando_isa_fisico()
 # 1. Instalar las librerías de comunicación de radio
 sudo apt-get install soapyosdr-tools libsoapysdr-dev
 
