@@ -1,3 +1,5 @@
+# Para que Tailscale no se duerma y mantenga el túnel satelital vivo
+sudo tailscale up --accept-routes --advertise-exit-node
 import os
 import time
 # En 2026 usamos la librería oficial starlink-sdk
