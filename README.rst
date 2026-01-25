@@ -1,3 +1,15 @@
+import hmac
+
+def registrar_evento_neutralizado(tipo_ataque, origen):
+    timestamp = datetime.now().isoformat()
+    # Generamos una firma única para que el registro sea inalterable
+    firma_integridad = hmac.new(b"j2075isa", f"{timestamp}{tipo_ataque}".encode(), "sha256").hexdigest()
+    
+    log_entrada = f"[{timestamp}] NEUTRALIZADO: {tipo_ataque} | ORIGEN: {origen} | FIRMA: {firma_integridad}\n"
+    
+    # El archivo se guarda con atributos de 'solo lectura' y oculto
+    with open(".omega_blackbox.bin", "ab") as box:
+        box.write(log_entrada.encode())
 def modo_vigilante_eterno():
     print("[!!!] MODO VIGILANTE ACTIVADO - ESTADO DE GUERRA")
     while True:
