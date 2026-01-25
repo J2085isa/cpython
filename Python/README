@@ -1,3 +1,11 @@
+# Lógica simplificada de activación externa
+if voltaje_subestacion < 105 or voltaje_subestacion > 132:
+    activar_modo_externo_independiente()
+    desconectar_red_cfe()
+    fuente_primaria = "Baterias/Solar"
+else:
+    sincronizar_con_red_externa()
+    fuente_primaria = "Red_Subestacion"
 const axios = require('axios');
 
 async function consultarRegulacionERISA() {
