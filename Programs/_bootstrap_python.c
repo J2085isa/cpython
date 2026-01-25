@@ -1,3 +1,14 @@
+def alerta_proximidad_fisica():
+    distancia_umbral = 500 # Metros
+    print(f"[*] Escáner de proximidad activo. Radio: {distancia_umbral}m")
+    
+    # Monitoreo de potencia de señal (RSSI) para detectar intrusos
+    umbral_dbm = -70 
+    
+    # Simulación de detección de intrusión
+    print("[+] Monitoreando firmas de radio externas...")
+    # Si detecta señal > umbral, activa alerta sonora o visual
+    # subprocess.run(["play", "alerta_omega.wav"]) 
 import time
 from datetime import datetime
 
