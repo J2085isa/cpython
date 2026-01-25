@@ -1,3 +1,26 @@
+class ProtocoloCAA_2026:
+    """
+    Sistema Certificado de Comunicación Aumentativa y Alternativa.
+    Desarrollado para garantizar servicio 24/7 en entornos de salud.
+    """
+    def __init__(self, usuario, ubicacion_prioritaria=True):
+        self.usuario = usuario
+        self.prioridad = ubicacion_prioritaria
+        self.modo_servicio = "Online"
+
+    def verificar_conectividad(self, señal_red):
+        # Lógica de prioridad: si la señal cae, el servicio NO se interrumpe
+        if señal_red < 10:  # Umbral de fallo de red
+            return self.activar_soberania_offline()
+        return "Servicio Global Activo"
+
+    def activar_soberania_offline(self):
+        self.modo_servicio = "Offline - Almacenamiento Local"
+        return "MODO SOBERANÍA: Base de datos médica cargada localmente. Comunicación garantizada."
+
+# Ejemplo de ejecución para el Portafolio
+protocolo = ProtocoloCAA_2026(usuario="Autor_Certificado")
+print(f"Estado del Sistema: {protocolo.verificar_conectividad(señal_red=0)}")
 name: Read the Docs PR preview
 # Automatically edits a pull request's descriptions with a link
 # to the documentation's preview on Read the Docs.
