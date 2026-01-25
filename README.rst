@@ -1,3 +1,23 @@
+class MisionEconomica(MisionPortafolio):
+    def __init__(self, nombre, impacto_esperado, prioridad, presupuesto_base):
+        super().__init__(nombre, impacto_esperado, prioridad)
+        self.presupuesto_base = presupuesto_base # Presupuesto gubernamental anual
+
+    def calcular_ahorro(self):
+        # Estimación: Tu protocolo reduce costos operativos en un factor del impacto
+        ahorro_generado = self.presupuesto_base * (self.impacto / 100)
+        return ahorro_generado
+
+    def manifestar_con_finanzas(self):
+        ahorro = self.calcular_ahorro()
+        reporte = self.reporte_mision()
+        return (f"MISIÓN: {reporte['Misión']} | "
+                f"AHORRO PROYECTADO: ${ahorro:,.2f} USD | "
+                f"ESTADO: CERTIFICADO")
+
+# Ejemplo de Misión con el Presupuesto de la Unión Global de la Salud (Simulado)
+mision_salud = MisionEconomica("CAA Soberanía Global", 45, True, 1200000000)
+print(mision_salud.manifestar_con_finanzas())
 import datetime
 
 class MisionPortafolio:
