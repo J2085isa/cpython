@@ -1,3 +1,33 @@
+import os
+import time
+# En 2026 usamos la librería oficial starlink-sdk
+from starlink_sdk import DishClient 
+
+def verificar_conexion():
+    dish = DishClient()
+    status = dish.get_status()
+    
+    # Verificamos latencia y obstrucciones
+    if status.is_obstructed:
+        print("⚠️ Alerta: Obstrucción detectada. Sincronización pausada.")
+        return False
+    
+    if status.latency_ms > 50:
+        print(f"🐢 Latencia alta: {status.latency_ms}ms. Esperando estabilidad...")
+        return False
+        
+    print(f"🚀 Conexión Starlink Óptima: {status.downlink_throughput_mbps} Mbps")
+    return True
+
+def unificar_carpeta():
+    if verificar_conexion():
+        print("Sincronizando carpeta de códigos con el clúster satelital...")
+        os.system("git push origin main")
+        # Opcional: Rclone para respaldo en la nube
+        # os.system("rclone sync ./mi_codigo starlink-cloud:backup")
+
+if __name__ == "__main__":
+    unificar_carpeta()
 class ProtocoloCCA(NucleoNeurofisico):
     def __init__(self):
         super().__init__()
