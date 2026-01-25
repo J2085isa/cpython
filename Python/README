@@ -1,3 +1,21 @@
+def gestionar_energia(nivel_bateria, red_cfe_activa):
+    if not red_cfe_activa:
+        print("Alerta: Subestación Cunduacán fuera de servicio. Iniciando respaldo.")
+        
+        # Paso 1: Cortar cargas pesadas inmediatamente
+        desactivar_relevador("Nivel_3_Pesado") 
+        
+        # Paso 2: Gestión inteligente de duración
+        if nivel_bateria < 50:
+            desactivar_relevador("Nivel_2_Confort")
+            enviar_notificacion("Modo Ahorro Extremo: Solo cargas críticas activas.")
+            
+        if nivel_bateria < 15:
+            desactivar_todo_excepto("Seguridad_y_Comunicaciones")
+            print("Reserva mínima alcanzada.")
+    else:
+        print("Red estable. Cargando baterías y permitiendo consumo total.")
+        activar_todos_los_relevadores()
 # Lógica simplificada de activación externa
 if voltaje_subestacion < 105 or voltaje_subestacion > 132:
     activar_modo_externo_independiente()
