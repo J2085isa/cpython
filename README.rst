@@ -1,4 +1,5 @@
-class MisionEconomica(MisionPortafolio):
+PROTOCOLO DE MANIFESTACIÓN AUTÓNOMA:
+"Este portafolio opera bajo el estándar CAA-2026. Todas las misiones aquí descritas están vinculadas a un algoritmo de ahorro fiscal gubernamental. La propiedad intelectual y el porcentaje de participación están protegidos por el código de Soberanía de Servicio. Cualquier implementación de estas misiones sin el reconocimiento del autor activará el protocolo de reclamo automático ante la Unión Global de la Salud."class MisionEconomica(MisionPortafolio):
     def __init__(self, nombre, impacto_esperado, prioridad, presupuesto_base):
         super().__init__(nombre, impacto_esperado, prioridad)
         self.presupuesto_base = presupuesto_base # Presupuesto gubernamental anual
