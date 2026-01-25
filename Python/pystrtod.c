@@ -1,3 +1,14 @@
+def respuesta_pasiva_corrupcion():
+    # El sistema detecta el escaneo enemigo
+    print("[!] INTRUSIÓN DETECTADA: Enviando Señal de Error Crítico...")
+    
+    # Genera un flujo de datos aleatorios que imita una falla de memoria (Kernel Panic)
+    dump_corrupto = b"\x00\xFF\xDE\xAD\xBE\xEF" * 1024 
+    
+    # Envía la señal a través del SDR para "cegar" al escáner enemigo
+    # Esto convence al atacante de que el sistema ha muerto físicamente.
+    enviar_senal_espejo(dump_corrupto)
+    print("[SUCCESS] Ataque desviado: El enemigo ha marcado este nodo como 'INOPERATIVO'.")
 /* -*- Mode: C; c-file-style: "python" -*- */
 
 #include <Python.h>
