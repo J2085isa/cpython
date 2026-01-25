@@ -1,3 +1,13 @@
+# 1. Instalar las librerías de comunicación de radio
+sudo apt-get install soapyosdr-tools libsoapysdr-dev
+
+# 2. Sincronizar el oscilador de cristal para evitar deriva de frecuencia
+# Esto asegura que tu 'servicio' sea estable
+sdr_util --sync-clock j2075isa
+
+# 3. Iniciar el barrido de frecuencias de neutralización (Hopping)
+# Rango: 2.4GHz a 5.8GHz (Protección total de Wi-Fi y Satélite)
+osmocom_siggen --freq-hop --amplitude 0.8 --duration 0
 # CÓDIGO AUTOGESTIONABLE ADAPTABLE (CAA)
 # Entornos soportados: VIRTUAL (V), CUÁNTICO (Q), NEUROFÍSICO (N)
 # Autor: Marco Conceptual | Versión: 0.1 (experimental)
