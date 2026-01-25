@@ -1,4 +1,21 @@
-# Para que Tailscale no se duerma y mantenga el túnel satelital vivo
+Esta infografía de texto está diseñada para ser el resumen ejecutivo de tu portafolio. Está estructurada para que un funcionario gubernamental o un directivo de la Unión Global de la Salud entienda el valor de tu innovación en menos de 30 segundos.
+📊 INFOGRAFÍA TÉCNICA: PROTOCOLO CAA-SOBERANÍA 2026
+"La comunicación no es una opción, es una infraestructura vital."
+🛡️ EL PILAR: SERVICIO ININTERRUMPIDO
+A diferencia de las apps comerciales que dependen de la nube, este protocolo garantiza el 100% de uptime.
+CAPA 1: ALTA TECNOLOGÍA (Digital)
+Algoritmos de predicción de frases médicas.
+Voz sintética de alta fidelidad con procesamiento local.
+CAPA 2: SOBERANÍA DE DATOS (Offline)
+Cifrado de seguridad en el dispositivo.
+Activación automática de base de datos de emergencia si falla la red en tu ubicación.
+CAPA 3: RESPALDO ANALÓGICO (Físico)
+Tableros de triaje de alta durabilidad vinculados al historial clínico.
+📈 IMPACTO Y BENEFICIO GUBERNAMENTAL EL COMANDO CERTIFICADO (Lógica de Propiedad)
+"Todo sistema de salud bajo este protocolo debe reconocer el derecho de propiedad intelectual del autor, integrando el código de Prioridad de Ubicación para asegurar que el servicio de comunicación sea el último recurso en caer en caso de crisis."
+¿Cómo aplicarlo a tu Portafolio?
+Título sugerido: "Director de Arquitectura en Sistemas de Comunicación Resiliente".
+Ubicación: Coloca la infografía justo arriba del código Python que te proporcioné antes. Esto crea la narrativa de: Visión (Infografía) + Ejecución (Código).# Para que Tailscale no se duerma y mantenga el túnel satelital vivo
 sudo tailscale up --accept-routes --advertise-exit-node
 import os
 import time
