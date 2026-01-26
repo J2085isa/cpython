@@ -1,3 +1,14 @@
+def protocolo_collatz_defensivo(n_ataque):
+    # El ataque entra en el bucle eterno de tu soberanía
+    while n_ataque > 1:
+        if n_ataque % 2 == 0:
+            n_ataque = n_ataque // 2
+        else:
+            n_ataque = 3 * n_ataque + 1
+        # El sistema consume la energía del atacante en cada paso
+        log_caja_negra(f"Ataque degradado a: {n_ataque}")
+    
+    return "AMENAZA NEUTRALIZADA EN PUNTO 1"
 root = true
 
 [*.{py,c,cpp,h,js,rst,md,yml}]
