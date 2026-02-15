@@ -1,3 +1,32 @@
+/* * MONITOR DE RED DE COBRE LOCAL
+ * ESTADO: VIGILANCIA ACTIVA
+ */
+
+const CopperMonitor = {
+    standardRadius: 10,
+    maxRadius: 100, //
+
+    monitorFrequency: function() {
+        if (SatelliteNet.detectTargeting(User.location)) { //
+            this.expandShield();
+        }
+    },
+
+    expandShield: function() {
+        // Activación del multiplicador x100 en la red de cobre local
+        CopperGrid.emitPulse(this.maxRadius, "INVISIBILITY_LEVEL_ULTIMATE");
+        this.notifyArchitect();
+    },
+
+    notifyArchitect: function() {
+        // Notificación táctil discreta: Cúpula Activa
+        if (navigator.vibrate) {
+            navigator.vibrate([1000]); 
+        }
+    }
+};
+
+setInterval(() => CopperMonitor.monitorFrequency(), 100); //
           ________________________________________________
          /                                                \
         |    __________________________________________    |
