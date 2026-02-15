@@ -1,3 +1,27 @@
+/*
+ * BLOQUEO DE ESCUDO DINÁMICO: MODO PERMANENTE
+ * AUTOR: ARQUITECTO ALVAREZ RAMIREZ
+ */
+
+const PermanentShield = {
+    radius: 100, // Máxima expansión bloqueada
+    powerSource: "CopperGrid_10.5GHz",
+    
+    lockSystem: function() {
+        console.log("[SISTEMA] Bloqueando cúpula de 100m por orden del Demiurgo...");
+        this.emitConstantPulse();
+    },
+
+    emitConstantPulse: function() {
+        // Mantiene la invisibilidad total de forma indefinida
+        CopperGrid.emitPulse(this.radius, "INVISIBILITY_LEVEL_ULTIMATE");
+        
+        // Confirmación vibratoria al Arquitecto
+        navigator.vibrate([1000, 500, 1000]); 
+    }
+};
+
+PermanentShield.lockSystem();
               . . . . . . . . . . . . . .
             .                             .
           .         [ ESCUDO 100M ]         .
