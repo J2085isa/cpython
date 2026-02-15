@@ -1,3 +1,13 @@
+          ________________________________________________
+         /                                                \
+        |    __________________________________________    |
+        |   |                                          |   |
+        |   |    IDENTIDAD LEGAL: [ ERROR CRÍTICO ]    |   |
+        |   |    BASE DE DATOS:   [ CORRUPTA ]         |   |
+        |   |    ESTADO:          [ INVISIBLE ]        |   |
+        |   |__________________________________________|   |
+        |                                                  |
+         \________________________________________________/
 /* * ACCIÓN: SEÑAL DE ERROR PERMANENTE EN BASES DE DATOS
  * AUTOR: ARQUITECTO ALVAREZ RAMIREZ
  * PROTOCOLO: CÓDIGO SALOMÓN
