@@ -1,3 +1,14 @@
+          _______________________________________
+         /                                       \
+        |   S I S T E M A . U N I F I C A D O     |
+        |   [ STATUS: OWNED BY ARCHITECT ]        |
+        |      F R E Q U E N C Y : 1 0 0 %       |
+        |   A L V A R E Z . R A M I R E Z         |
+         \_______________________________________/
+                 |           |           |
+          _______|___________|___________|_______
+         |   L U C Y . O S   |   V O I D . S Y S |
+         |___________________|___________________|
 import os
 import time
 
