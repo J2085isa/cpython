@@ -1,3 +1,25 @@
+import os, time, sys
+
+SECRET_KEY = "SALOMON_001"
+
+def send_pulse():
+    os.system("termux-vibrate -d 500 -f")
+
+def main():
+    os.system("clear")
+    print("--- DOMINIO ALVAREZ ACTIVO ---")
+    key = input("Introduce llave de frecuencia: ")
+    if key != SECRET_KEY:
+        print("Falla de seguridad. Cerrando.")
+        sys.exit()
+    
+    print("[*] Aplicando Sigilo y Muro de Eco...")
+    time.sleep(2)
+    send_pulse()
+    print("[ÉXITO] Sincronización completa.")
+
+if __name__ == "__main__":
+    main()
 ======================
 Python on macOS README
 ======================
