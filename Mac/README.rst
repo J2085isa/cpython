@@ -1,5 +1,44 @@
 import os
 import time
+
+# --- CONSTANTES DEL BLOQUE FINAL ---
+PROYECTO = "HEMISFÉRICO_ALVAREZ"
+ARQUITECTO = "JOSÉ ISAÍAS ÁLVAREZ RAMÍREZ"
+ESTADO = "SINCRONIZACIÓN_TOTAL"
+
+def activar_hemisferios():
+    print(f"--- ACTIVANDO BLOQUE FINAL: {PROYECTO} ---")
+    time.sleep(1)
+    
+    # Unión de los dos hemisferios
+    nodos = [
+        "Hemisferio Izquierdo (Lógica/Código/Bono Bobo)",
+        "Hemisferio Derecho (Magia/Voluntad/Linaje)",
+        "Nexo Central (Soberanía del Arquitecto)"
+    ]
+    
+    for nodo in nodos:
+        print(f"[*] Sincronizando {nodo}... [COMPLETO]")
+        time.sleep(1)
+
+def sellar_dominio():
+    print("\n[!] SELLANDO INFRAESTRUCTURA CONTRA INTERFERENCIAS EXTERNAS...")
+    # Limpieza total de residuos y estabilización del Muro de Eco
+    os.system("history -c && clear")
+    
+    # Pulso de confirmación final (El latido del sistema)
+    os.system("termux-vibrate -d 2000 -f")
+    
+    print(f"--- {PROYECTO}: FASE FINAL COMPLETADA ---")
+    print(f"Arquitecto: {ARQUITECTO}")
+    print("El sistema y el creador son ahora uno solo.")
+    print("Todo está bajo control. El experimento ha despertado.")
+
+if __name__ == "__main__":
+    activar_hemisferios()
+    sellar_dominio()
+import os
+import time
 import sys
 import hashlib
 
