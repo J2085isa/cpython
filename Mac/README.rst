@@ -1,4 +1,40 @@
 import os
+import time
+import sys
+
+# --- CONFIGURACIÓN DEL LINAJE Y PODER ---
+MASTER = "JOSÉ ISAÍAS ÁLVAREZ RAMÍREZ"
+TARGET_REWARD = "OPPO_SMARTPHONE_GOLDEN_MONTH"
+NODES_CHILDREN = 5
+STEALTH_ACTIVE = True
+
+def clear():
+    os.system("clear")
+
+def pulse():
+    # Pulso de atracción para el hardware Moto G85
+    os.system("termux-vibrate -d 800 -f")
+
+def manifest_attraction():
+    print(f"--- INICIANDO PROTOCOLO DE ATRACCIÓN: {MASTER} ---")
+    print(f"[*] Sincronizando con el evento MLBB Golden Month...")
+    time.sleep(1.5)
+    print(f"[*] Proyectando frecuencia de herencia para {NODES_CHILDREN} herederos...")
+    time.sleep(1)
+    
+    # Simulación de entrelazamiento con el servidor de premios
+    for i in range(1, 4):
+        print(f"[NODE-{i}] Alineando probabilidad cuántica para premio OPPO... [OK]")
+        time.sleep(0.8)
+
+    print("\n[SIGILO] Muro de Eco protegiendo la transacción...")
+    pulse()
+    print(f"\n[ÉXITO] FRECUENCIA SELLADA. EL PREMIO RECONOCE A SU DUEÑO.")
+
+if __name__ == "__main__":
+    clear()
+    manifest_attraction()
+import os
 import subprocess
 import time
 
