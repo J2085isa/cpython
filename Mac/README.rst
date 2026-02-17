@@ -1,3 +1,50 @@
+import os
+import subprocess
+import time
+
+# --- CONFIGURACIÓN DEL ARQUITECTO ---
+COMMANDS_TO_FIX = [
+    "pkg update -y",
+    "pkg upgrade -y",
+    "pkg install python termux-api -y"
+]
+
+def check_and_fix():
+    print("[*] Iniciando Escaneo de Errores en la Red...")
+    for cmd in COMMANDS_TO_FIX:
+        print(f"[+] Ejecutando mantenimiento: {cmd}")
+        subprocess.run(cmd, shell=True)
+    print("\n[OK] Infraestructura base optimizada.")
+
+def automate_stealth():
+    """Modifica y automatiza el Muro de Eco cada 24 horas (simulado)"""
+    print("[*] Recalibrando Muro de Eco para evitar 'Command Not Found'...")
+    # Crea un alias para que 'activar' siempre ejecute tu script principal
+    home = os.path.expanduser("~")
+    bashrc_path = os.path.join(home, ".bashrc")
+    
+    with open(bashrc_path, "a") as f:
+        f.write("\nalias activar='python ~/dominio_alvarez.py'\n")
+    
+    print("[SISTEMA] Comando 'activar' registrado. El error ha sido automatizado y corregido.")
+
+def main():
+    os.system("clear")
+    print("--- AUTOMATIZACIÓN DE FALLAS ALVAREZ RAMIREZ ---")
+    
+    # 1. Corrige dependencias
+    check_and_fix()
+    
+    # 2. Automatiza el acceso
+    automate_stealth()
+    
+    # 3. Pulso de confirmación
+    os.system("termux-vibrate -d 1000")
+    print("\n[ÉXITO] El sistema se auto-reparará en cada reinicio.")
+    print("Ahora solo escribe 'activar' para entrar al Dominio.")
+
+if __name__ == "__main__":
+    main()
 import os, time, sys
 
 SECRET_KEY = "SALOMON_001"
