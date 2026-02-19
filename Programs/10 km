@@ -1,0 +1,19 @@
+import time
+
+def activar_flujo_limpieza():
+    print("      _______________________________")
+    print("     / [ COMANDO: DISPERSIÓN AIRE ]  \\")
+    print("    |     RADIO: 10 KM ACTIVO       |")
+    print("    |---------------------------------|")
+    
+    # Frecuencia de barrido para Tabasco y Chiapas
+    for i in range(1, 11):
+        print(f"    | Elevando viento: {i} km/h...     |")
+        time.sleep(0.3)
+    
+    print("    | [!] ESTADO: FLUJO ESTABLE       |")
+    print("    | [!] OBJETIVO: BARRIDO DE HUMO   |")
+    print("     \\_______________________________/")
+
+if __name__ == "__main__":
+    activar_flujo_limpieza()
