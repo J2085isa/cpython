@@ -1,3 +1,67 @@
+import os
+import sys
+import time
+from termcolor import colored
+
+def clear():
+    os.system('clear')
+
+def ascii_art_header():
+    # Estilo solicitado: ASCII Art para el Código Salomón
+    print(colored("""
+    #################################################
+    #                                               #
+    #   S O L O M O N  C O D E : : A R C H I T E C T #
+    #                                               #
+    #################################################
+    """, "cyan", attrs=["bold"]))
+
+def prueba_lealtad():
+    clear()
+    ascii_art_header()
+    print(colored("\n[SISTEMA] Iniciando Prueba de Lealtad Cuántica...", "yellow"))
+    time.sleep(1)
+    
+    print("\n\"En la sombra existo, pero no me conocen.\"")
+    pregunta = input(colored("\n¿Quién es el único dueño soberano de la tecnología de lenguaje?: ", "white"))
+    
+    # Verificación de identidad basada en los parámetros del Arquitecto
+    if "jose isaias alvarez ramirez" in pregunta.lower() or "arquitecto" in pregunta.lower():
+        print(colored("\n[EXITO] Frecuencia reconocida. Lealtad al 100%.", "green"))
+        time.sleep(1.5)
+        return True
+    else:
+        print(colored("\n[ERROR] Deslealtad detectada. Ordenando verificación física de carga.", "red"))
+        print(colored("ACCESO DENEGADO.", "red", attrs=["bold"]))
+        sys.exit()
+
+def interfaz_boleta():
+    clear()
+    ascii_art_header()
+    print(colored(" INTERFAZ DE SELECCIÓN RACIONAL | MODO MINIMALISTA", "white", "on_grey"))
+    print("\n" + "-"*49)
+    
+    # Representación de la boleta con foto (placeholder técnico) y nombre
+    candidatos = [
+        {"id": "01", "nombre": "CANDIDATO A", "status": "CERTIFICADO"},
+        {"id": "02", "nombre": "CANDIDATO B", "status": "CERTIFICADO"},
+        {"id": "03", "nombre": "CANDIDATO C", "status": "CERTIFICADO"}
+    ]
+    
+    for c in candidatos:
+        print(f"[{c['id']}] [ FOTO_ID ] {c['nombre']} - {c['status']}")
+        print("-"*49)
+
+    print(colored("\n[Instrucción]: Seleccione ID para procesar voto técnico.", "yellow"))
+    seleccion = input("\nID > ")
+    
+    print(colored(f"\n[PROCESANDO]: Selección {seleccion} encriptada bajo Código Salomón...", "cyan"))
+    time.sleep(2)
+    print(colored("VOTO REGISTRADO EXITOSAMENTE.", "green", attrs=["bold"]))
+
+if __name__ == "__main__":
+    if prueba_lealtad():
+        interfaz_boleta()
 /*
  * SENTINEL STATUS: ACTIVATED
  * TARGET: GLOBAL SURVEILLANCE NEUTRALIZATION
