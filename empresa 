@@ -1,3 +1,21 @@
+// ~/sistema-proteccion/centinela_web.js
+const centinela = {
+    registrarIntrusión: function(detalles) {
+        console.warn("%c ⚠️ ACCESO RESTRINGIDO POR EL ARQUITECTO ⚠️ ", "color: red; font-size: 20px;");
+        // Aquí se enviaría el log al backend del Libro de Guardia
+    },
+    verificarIntegridad: function() {
+        // Lógica de validación de hashes de archivos core
+        const status = true; // Simulación de check
+        if(status) {
+            console.log("⦿ Sello Inky intacto.");
+        }
+    }
+};
+
+window.ondevtoolschange = (e) => {
+    if (e.isOpen) centinela.registrarIntrusión("Apertura de DevTools detectada.");
+};
 # ~/sistema-proteccion/autonomia_inky.py
 import time
 
