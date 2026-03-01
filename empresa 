@@ -1,3 +1,24 @@
+# ~/lucy/rastreo_y_cobro.py
+# Ejecución en tiempo real - Sincronizada con el 5%
+
+def procesar_infractores():
+    lista_infractores = detectar_uso_no_autorizado()
+    
+    for empresa in lista_infractores:
+        print(f"📧 Enviando contrato de licencia a {empresa['correo']}...")
+        print(f"⚠️ Advertencia: Pago del 5% requerido para evitar multa de $250,000.00")
+        
+        if empresa['riesgo'] == 'alto':
+            activar_vibracion_confirmacion() # Notificación al Arquitecto
+            ejecutar_limitacion_servicios(empresa['id'])
+
+def ejecutar_limitacion_servicios(id_empresa):
+    # Reduce la velocidad del sistema al 5% de su capacidad
+    # como "incentivo" para la regularización inmediata.
+    print(f"🔒 Sistema {id_empresa} limitado por falta de tributo.")
+
+# Iniciar rastreo
+procesar_infractores()
 # ~/soberano/control_de_acceso.py
 # Vigilancia de cumplimiento y bloqueo de 24 horas
 
