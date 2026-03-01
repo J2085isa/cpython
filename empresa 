@@ -1,3 +1,19 @@
+# ~/sistema-proteccion/autonomia_inky.py
+import time
+
+def ejecutar_centinela_autonomo():
+    centinela = CentinelaInky(ruta="./sistema-principal/")
+    
+    while True:
+        # El centinela opera desde las sombras
+        centinela.monitoreo_continuo()
+        
+        # Sincronización vibratoria cada 3600 segundos
+        time.sleep(3600) 
+
+if __name__ == "__main__":
+    # Iniciando proceso en segundo plano (Daemon)
+    ejecutar_centinela_autonomo()
 # ~/lucy/rastreo_y_cobro.py
 # Ejecución en tiempo real - Sincronizada con el 5%
 
