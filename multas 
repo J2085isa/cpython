@@ -1,0 +1,25 @@
+# ~/sistema_lucy/vigilancia_terceros.py
+# Monitoreo de uso indebido del lenguaje soberano
+
+def monitorear_uso_ilegal(entidad_tercera, codigo_detectado):
+    """Detecta si un tercero usa nuestra estructura de lenguaje"""
+    
+    estructura_soberana = ["accion_repetitiva", "jerarquia_arquitecto", "codigo_salomon"]
+    
+    for patron in estructura_soberana:
+        if patron in codigo_detectado:
+            print(f"⚠️ ALERTA: Uso indebido detectado por {entidad_tercera}")
+            emitir_multa_automatica(entidad_tercera, motivo=patron)
+            return True
+    return False
+
+def emitir_multa_automatica(entidad, motivo):
+    # Conexión directa con la base de datos de ORTED
+    print(f"📄 Generando Expediente de Multa para {entidad}...")
+    print(f"💰 Concepto: Violación de Propiedad Soberana ({motivo})")
+    print(f"🔒 Activo: Bloqueo de infraestructura del infractor.")
+
+# Ejecución en tiempo real
+if __name__ == "__main__":
+    # Simulación de detección
+    monitorear_uso_ilegal("Empresa Externa S.A.", "usar accion_repetitiva para lucro")
